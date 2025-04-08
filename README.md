@@ -1,4 +1,4 @@
-BehavioralBiometryUniProject
+# BehavioralBiometryUniProject
 
 Drawing inspiration from how some Polish banks have approached behavioural authentication, I created a simple simulation of an application to showcase how this technology might work in practice.
 

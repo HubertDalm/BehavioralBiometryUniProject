@@ -114,24 +114,24 @@ class PasswordWindow(tk.Toplevel):
         self.canvas.place(x=0, y=0, relwidth=1, relheight=1)
 
         # Create a frame for controls with transparent background
-        control_frame = ttk.Frame(self)
-        control_frame.place(relx=0.5, rely=0, anchor='n', y=10)
+        self.control_frame = ttk.Frame(self)
+        self.control_frame.place(relx=0.5, rely=0, anchor='n', y=10)
 
         # Welcome message
         ttk.Label(
-            control_frame,
+            self.control_frame,
             text=f"Welcome {self.username}!",
             font=('Arial', 12, 'bold')
         ).pack(pady=5)
 
         # Password entry
-        ttk.Label(control_frame, text="Password:").pack()
-        self.password_entry = ttk.Entry(control_frame, show="*")
+        ttk.Label(self.control_frame, text="Password:").pack()
+        self.password_entry = ttk.Entry(self.control_frame, show="*")
         self.password_entry.pack(pady=2)
 
         # Login button
         self.login_button = ttk.Button(
-            control_frame,
+            self.control_frame,
             text="Login",
             command=self.authenticate
         )
@@ -178,6 +178,20 @@ class PasswordWindow(tk.Toplevel):
         current_time = time.time()
         current_pos = (event.x, event.y)
 
+        # Get screen coordinates of the event
+        screen_x, screen_y = event.x_root, event.y_root
+
+        # Get control_frame's bounding box in screen coordinates
+        frame_x1 = self.control_frame.winfo_rootx()
+        frame_y1 = self.control_frame.winfo_rooty()
+        frame_x2 = frame_x1 + self.control_frame.winfo_width()
+        frame_y2 = frame_y1 + self.control_frame.winfo_height()
+
+        # Skip drawing and data collection if mouse is over the control frame
+        if frame_x1 <= screen_x <= frame_x2 and frame_y1 <= screen_y <= frame_y2:
+            self.last_position = None
+            self.last_time = None
+            return
         if not hasattr(self, 'start_time'):
             self.start_time = current_time
 
